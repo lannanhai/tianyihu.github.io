@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="UTF-8" />
+<title>天一湖地图</title>
+<!--引用百度地图API-->
+<style type="text/css">
+.navbar-brand {
+	background-image: url(img/001.png);
+	width: 65px;
+	background-size: 100%;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+    .iw_poi_title {color:#CC5522;font-size:14px;font-weight:bold;overflow:hidden;padding-right:13px;white-space:nowrap}
+    .iw_poi_content {font:12px arial,sans-serif;overflow:visible;padding-top:4px;white-space:-moz-pre-wrap;word-wrap:break-word}
+</style>
+<script type="text/javascript" src="http://api.map.baidu.com/api?key=&v=1.1&services=true"></script>
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+</head>
+
+<body>
+	
+	<div class="navbar navbar-default">
+			<div class="container">
+				<div class="navbar-header">
+					<a href="index.html" class="navbar-brand"></a>
+				</div>
+				<label id="toggle-label" class="visible-xs-block" for="toggle-checkbox">	菜单</label>
+				<input class="hidden" id="toggle-checkbox" type="checkbox" name="" id="" value="" />
+				<div class="hidden-xs">
+					<ul class="nav navbar-nav">
+						<li> <!--class="active"-->
+							<a href="index.html">首页</a>
+						</li>
+						<li>
+							<a href="jin quanjing.html">河中医全景</a>
+						</li>
+						<li>
+							<a href="xuelianhua.html">中药</a>
+						</li>
+						<li>
+							<a href="wanxia.html">天一湖晚霞</a>
+						</li>
+						<li>
+							<a href="tianyihuchun.html">春夏秋冬</a>
+						</li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li>
+							<a href="ditu.html">地图</a>
+						</li>
+						<li>
+							<a href="banquan.html">版权</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		
+		
+	
+	
+	
+	
+	
+	<div align="center">
+  <!--百度地图容器-->
+  <div style="width:800px;height:550px;border:#ccc solid 1px;" id="dituContent"></div>
+  <br />
+  <p>天一湖位于<a href="https://www.hactcm.edu.cn/">河南中医药大学</a>（龙子湖校区）</p>
+	</div>
+		<div class="footer text-center">
+			<hr />
+			© 龙子湖
+			</div>
+
+</body>
+<script type="text/javascript">
+    //创建和初始化地图函数：
+    function initMap(){
+        createMap();//创建地图
+        setMapEvent();//设置地图事件
+        addMapControl();//向地图添加控件
+        addPolyline();//向地图中添加线
+        addRemark();//向地图中添加文字标注
+    }
+    
+    //创建地图函数：
+    function createMap(){
+        var map = new BMap.Map("dituContent");//在百度地图容器中创建一个地图
+        var point = new BMap.Point(113.812081,34.786416);//定义一个中心点坐标
+        map.centerAndZoom(point,17);//设定地图的中心点和坐标并将地图显示在地图容器中
+        window.map = map;//将map变量存储在全局
+    }
+    
+    //地图事件设置函数：
+    function setMapEvent(){
+//	dis修改为en,开启
+        map.enableDragging();//禁用地图拖拽事件
+        map.enableScrollWheelZoom();//禁用地图滚轮放大缩小，默认禁用(可不写)
+        map.enableDoubleClickZoom();//禁用鼠标双击放大
+        map.disableKeyboard();//禁用键盘上下左右键移动地图，默认禁用(可不写)
+    }
+    
+    //地图控件添加函数：
+    function addMapControl(){
+                        //向地图中添加比例尺控件
+	var ctrl_sca = new BMap.ScaleControl({anchor:BMAP_ANCHOR_TOP_RIGHT});
+	map.addControl(ctrl_sca);
+    }
+    
+//标注线数组
+    var plPoints = [{style:"solid",weight:4,color:"#00f",opacity:0.6,points:["113.810096|34.784815","113.810168|34.784415","113.810473|34.784222","113.811084|34.784133","113.811461|34.784118","113.811515|34.783777","113.811443|34.783629","113.811407|34.783407","113.811246|34.783273","113.810922|34.783229","113.810689|34.783199","113.810545|34.783199","113.810096|34.783199","113.809862|34.783199","113.809395|34.783199","113.809072|34.78317","113.809036|34.783333","113.809144|34.783407","113.809144|34.7836","113.809018|34.783763","113.808874|34.783777","113.808676|34.783718","113.808605|34.783644","113.808461|34.783585","113.808299|34.783703","113.808263|34.783866","113.808263|34.784","113.808443|34.784385","113.80873|34.784726","113.808946|34.785008","113.809377|34.785082","113.809844|34.785097","113.810078|34.784948","113.810132|34.78483","113.81015|34.78483","113.810096|34.7848"]}
+		 ];
+    //向地图中添加线函数
+    function addPolyline(){
+		for(var i=0;i<plPoints.length;i++){
+			var json = plPoints[i];
+			var points = [];
+			for(var j=0;j<json.points.length;j++){
+				var p1 = json.points[j].split("|")[0];
+				var p2 = json.points[j].split("|")[1];
+				points.push(new BMap.Point(p1,p2));
+			}
+			var line = new BMap.Polyline(points,{strokeStyle:json.style,strokeWeight:json.weight,strokeColor:json.color,strokeOpacity:json.opacity});
+			map.addOverlay(line);
+		}
+	}
+//文字标注数组
+    var lbPoints = [{point:"113.809323|34.784044",content:"天一湖"}
+		 ];
+    //向地图中添加文字标注函数
+    function addRemark(){
+        for(var i=0;i<lbPoints.length;i++){
+            var json = lbPoints[i];
+            var p1 = json.point.split("|")[0];
+            var p2 = json.point.split("|")[1];
+            var label = new BMap.Label("<div style='padding:2px;'>"+json.content+"</div>",{point:new BMap.Point(p1,p2),offset:new BMap.Size(3,-6)});
+            map.addOverlay(label);
+            label.setStyle({borderColor:"#999"});
+        }
+    }
+    
+    initMap();//创建和初始化地图
+</script>
+</html>
